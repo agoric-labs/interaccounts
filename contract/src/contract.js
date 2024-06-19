@@ -1,7 +1,7 @@
 // @ts-check
 /* global harden */
 import '@agoric/zoe/exported.js';
-import { Far } from '@endo/marshal';
+import { Far } from '@endo/far';
 import { ICS27ICAProtocol } from './ica.js';
 
 /**
@@ -15,11 +15,17 @@ const start = () => {
 
   const publicFacet = Far('publicFacet', {
     // Public faucet for anyone to call
+    /**
+     * @param {import('@agoric/network').Port} port
+     * @param {object} connectionHandler
+     * @param {string} controllerConnectionId
+     * @param {string} hostConnectionId
+     */
     createICAAccount: (
-      /** @type {Port} */ port,
-      /** @type {object} */ connectionHandler,
-      /** @type {string} */ controllerConnectionId,
-      /** @type {string} */ hostConnectionId,
+      port,
+      connectionHandler,
+      controllerConnectionId,
+      hostConnectionId,
     ) =>
       ICS27ICAProtocol.createICS27Account(
         port,
@@ -27,9 +33,14 @@ const start = () => {
         controllerConnectionId,
         hostConnectionId,
       ),
+    /**
+     * 
+     * @param {[import('./types.js').Msg]} msgs 
+     * @param {import('@agoric/network').Connection} connection 
+     */
     sendICATxPacket: (
-      /** @type {[Msg]} */ msgs,
-      /** @type {Connection} */ connection,
+      msgs,
+      connection,
     ) => ICS27ICAProtocol.sendICATx(msgs, connection),
   });
 

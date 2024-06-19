@@ -1,19 +1,25 @@
 // @ts-check
-import { Far } from '@endo/marshal';
+import { E, Far } from '@endo/far';
 import { assert, details as X } from '@agoric/assert';
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx.js';
-import { Any } from 'cosmjs-types/google/protobuf/any.js';
-import { E } from '@endo/eventual-send';
+import { TxBody } from '@agoric/cosmic-proto/cosmos/tx/v1beta1/tx.js';
+import { Any } from '@agoric/cosmic-proto/google/protobuf/any.js';
 import { toBase64, fromBase64 } from '@cosmjs/encoding/build/base64.js';
+import { when } from '@agoric/vow/vat.js';
+
+/**
+ * @import { Msg, ICAProtocol, ICS27ICAPacket } from './types.js';
+ * @import { PromiseVow } from '@agoric/vow';
+ * @import { ConnectionHandler, Connection, Port, Bytes } from '@agoric/network';
+ */
 
 /**
  * Create an ICA account/channel on the connection provided
  *
  * @param {Port} port
- * @param {object} connectionHandler
+ * @param {ConnectionHandler} connectionHandler
  * @param {string} controllerConnectionId
  * @param {string} hostConnectionId
- * @returns {Promise<Connection>}
+ * @returns {PromiseVow<Connection>}
  */
 export const createICAAccount = async (
   port,
@@ -30,10 +36,10 @@ export const createICAAccount = async (
     txType: 'sdk_multi_msg',
   });
 
-  const connection = await E(port).connect(
+  const connection = await when(E(port).connect(
     `/ibc-hop/${controllerConnectionId}/ibc-port/icahost/ordered/${connString}`,
     connectionHandler,
-  );
+  ));
 
   return connection;
 };
@@ -86,10 +92,10 @@ export const sendICAPacket = async (msgs, connection) => {
     memo: '',
   };
 
-    /** @type {Data} */
+    /** @type {Bytes} */
   const packet = JSON.stringify(ics27);
 
-  const res = await E(connection).send(packet);
+  const res = await when(E(connection).send(packet));
 
   return res;
 };
