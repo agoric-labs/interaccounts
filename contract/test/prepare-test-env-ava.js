@@ -12,12 +12,14 @@ import { wrapTest } from '@endo/ses-ava';
 
 import { prepareNetworkProtocol, prepareLoopbackProtocolHandler } from '@agoric/network';
 import { makeHeapZone } from '@agoric/zone/heap.js';
-import { vowTools } from '@agoric/vow/vat.js';
+import { prepareVowTools } from '@agoric/vow';
 
 /** @typedef {Awaited<ReturnType<makeTestContext>>} Context */
 
 /** @typedef {import('ava').ExecutionContext<Context>} ExecutionContext */
 export const test = /** @type {import('ava').TestInterface<Context>} */ (/** @type {unknown} */ (wrapTest(rawTest)));
+
+const vowTools = prepareVowTools(makeHeapZone());
 
 /**
  * @param {any} _t
@@ -29,5 +31,5 @@ export const makeTestContext = async _t => {
 
   const protocol = makeNetworkProtocol(makeLoopbackProtocolHandler());
 
-  return { zone, protocol };
+  return { zone, protocol, when: vowTools.when };
 };

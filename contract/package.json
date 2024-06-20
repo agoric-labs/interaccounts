@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "ava": "^3.13.0",
-    "eslint": "^7.23.0",
+    "eslint": "^8.50.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-jessie": "^0.0.6",
     "eslint-config-prettier": "^6.12.0",
@@ -37,6 +37,7 @@
     "@agoric/notifier": "beta",
     "@agoric/store": "beta",
     "@agoric/zoe": "beta",
+    "@agoric/zone": "beta",
     "@agoric/vow": "beta",
     "@agoric/babel-standalone": "^7.17.7",
     "@agoric/swingset-vat": "beta",

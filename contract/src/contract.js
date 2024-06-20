@@ -1,19 +1,29 @@
 // @ts-check
 /* global harden */
 import '@agoric/zoe/exported.js';
-import { Far } from '@endo/far';
-import { ICS27ICAProtocol } from './ica.js';
+import { MessageShape, prepareICS27ICAProtocol } from './ica.js';
+import { makeDurableZone } from '@agoric/zone/durable.js';
+import { M } from '@agoric/store';
 
 /**
- *
- * @type {ContractStartFn}
+ * @param {unknown} _zcf
+ * @param {unknown} _pa
+ * @param {Baggage} baggage
  */
-const start = () => {
-  const creatorFacet = Far('creatorFacet', {
-    // The creator of the instance can be called by the creator
+const start = (_zcf, _pa, baggage) => {
+  const zone = makeDurableZone(baggage);
+
+  const makeICS27ICAProtocol = prepareICS27ICAProtocol(zone);
+  const ICS27ICAProtocol = makeICS27ICAProtocol();
+
+  const PublicFacetGuard = M.interface('ICS27ICA', {
+    createICAAccount:
+      M.call(M.remotable('port'), M.any(), M.string(), M.string())
+        .returns(M.promise()),
+    sendICATxPacket: M.call(M.arrayOf(MessageShape), M.any()).returns(M.promise()),
   });
 
-  const publicFacet = Far('publicFacet', {
+  const publicFacet = zone.exo('publicFacet', PublicFacetGuard, {
     // Public faucet for anyone to call
     /**
      * @param {import('@agoric/network').Port} port
@@ -27,24 +37,24 @@ const start = () => {
       controllerConnectionId,
       hostConnectionId,
     ) =>
-      ICS27ICAProtocol.createICS27Account(
+      ICS27ICAProtocol.createICSAccount(
         port,
         connectionHandler,
         controllerConnectionId,
         hostConnectionId,
       ),
+
     /**
-     * 
-     * @param {[import('./types.js').Msg]} msgs 
+     * @param {import('./types.js').Msg[]} msgs
      * @param {import('@agoric/network').Connection} connection 
      */
     sendICATxPacket: (
       msgs,
       connection,
-    ) => ICS27ICAProtocol.sendICATx(msgs, connection),
+    ) => ICS27ICAProtocol.sendICAPacket(msgs, connection),
   });
 
-  return harden({ creatorFacet, publicFacet });
+  return harden({ publicFacet });
 };
 
 harden(start);

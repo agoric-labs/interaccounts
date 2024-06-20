@@ -5,7 +5,6 @@ import { MsgSend } from '@agoric/cosmic-proto/cosmos/bank/v1beta1/tx.js';
 import { test, makeTestContext } from './prepare-test-env-ava.js';
 import path from 'path';
 
-import { when } from '@agoric/vow/vat.js';
 import { E, Far } from '@endo/far';
 import { encodeBase64 } from '@endo/base64';
 import { makePromiseKit } from '@endo/promise-kit';
@@ -32,7 +31,7 @@ const testPublicFacet = async (t) => {
   const instance = await E(zoe).startInstance(installation);
 
   // Create a network protocol to be used for testing
-  const { protocol } = t.context;
+  const { protocol, when } = t.context;
 
   /** @type {import('@endo/promise-kit').PromiseRecord<void>} */
   const closed = makePromiseKit();
@@ -78,6 +77,7 @@ const testPublicFacet = async (t) => {
       async onOpen(c, localAddr, remoteAddr, _connectionHandler) {
         t.is(localAddr, '/loopback/bar/nonce/1');
         t.is(remoteAddr, '/loopback/foo/nonce/2');
+
         const pingack = await when(E(instance.publicFacet).sendICATxPacket(
           [
             {
