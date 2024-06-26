@@ -27,8 +27,8 @@
 
 /**
  * @typedef {object} ICAProtocol
- * @property {(msgs: [Msg], connection: Connection) => PromiseVow<string>} sendICATx
- * @property {(port: Port, connectionHandler: object, controllerConnectionId: string, hostConnectionId: string) => PromiseVow<Connection>} createICS27Account
+ * @property {(msgs: Msg[], connection: Connection) => PromiseVow<string>} sendICAPacket
+ * @property {(port: Port, connectionHandler: object, controllerConnectionId: string, hostConnectionId: string) => PromiseVow<Connection>} createICAAccount
  */
 
 /**

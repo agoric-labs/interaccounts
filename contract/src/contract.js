@@ -8,7 +8,7 @@ import { M } from '@agoric/store';
 /**
  * @param {unknown} _zcf
  * @param {unknown} _pa
- * @param {Baggage} baggage
+ * @param {import('@agoric/swingset-liveslots').Baggage} baggage
  */
 const start = (_zcf, _pa, baggage) => {
   const zone = makeDurableZone(baggage);
@@ -37,7 +37,7 @@ const start = (_zcf, _pa, baggage) => {
       controllerConnectionId,
       hostConnectionId,
     ) =>
-      ICS27ICAProtocol.createICSAccount(
+      ICS27ICAProtocol.createICAAccount(
         port,
         connectionHandler,
         controllerConnectionId,
