@@ -7,7 +7,7 @@
   "scripts": {
     "build": "exit 0",
     "test": "ava --verbose",
-    "lint": "eslint '**/*.{js,jsx}'",
+    "lint": "yarn lint-check",
     "lint-fix": "eslint --fix '**/*.{js,jsx}'",
     "lint-check": "eslint '**/*.{js,jsx}'",
     "lint-fix-jessie": "eslint -c '.eslintrc-jessie.js' --fix '**/*.{js,jsx}'",
@@ -42,9 +42,7 @@
     "@endo/eventual-send": "^0.14.8",
     "@endo/init": "^0.5.37",
     "@endo/marshal": "^0.6.9",
-    "@cosmjs/encoding": "^0.28.4",
-    "@endo/promise-kit": "^0.2.42",
-    "cosmjs-types": "agoric-labs/cosmjs-types#Agoric-built"
+    "@endo/promise-kit": "^0.2.42"
   },
   "resolutions": {
     "protobufjs": "agoric-labs/protobuf.js#Agoric-built"
@@ -72,7 +70,7 @@
     ],
     "settings": {
       "jsdoc": {
-        "definedTags": ["import"]
+        "mode": "typescript"
       }
     }
   },
